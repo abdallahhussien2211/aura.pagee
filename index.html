@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    /* شعار متحرك */
+    .logo-spin {
+      animation: spin 6s linear infinite, glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #a855f7; }
+      to { box-shadow: 0 0 25px #c084fc; }
+    }
+
+    /* حركة الزرار */
+    .btn-anim {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .btn-anim:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.7), 0 0 25px rgba(192, 132, 252, 0.5);
+    }
+    .btn-anim:active {
+      transform: scale(1.1) rotate(-1deg);
+      box-shadow: 0 0 20px #a855f7;
+    }
+
+    /* حركة العداد */
+    #countdown {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+    #countdown:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 30px rgba(192, 132, 252, 0.3);
+    }
+    .animate-count {
+      animation: pop 0.3s ease forwards;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900 via-black to-purple-950 p-6">
+  <div class="bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl p-10 text-center max-w-lg border border-purple-400/30 w-full">
+    
+    <!-- الشعار -->
+    <div class="flex justify-center mb-4">
+      <div class="logo-spin w-16 h-16 rounded-full bg-gradient-to-tr from-purple-500 to-white flex items-center justify-center">
+        <span class="text-2xl font-bold text-purple-900">A</span>
+      </div>
+    </div>
+
+    <h1 class="text-4xl font-extrabold text-purple-300 mb-3">AURA ✨</h1>
+    <p class="text-lg text-gray-200 mb-6">أهلاً بيك في عالمي الخاص 🔮</p>
+
+    <!-- إدخال الاسم -->
+    <div class="mb-4">
+      <label for="nameInput" class="block text-purple-300 mb-2">اكتب اسمك:</label>
+      <input type="text" id="nameInput" class="rounded-lg p-2 text-black w-full" placeholder="اسمك">
+    </div>
+
+    <!-- العداد الأساسي -->
+    <div id="countdown" class="text-2xl font-bold text-white mb-6"></div>
+
+    <!-- إدخال تاريخ ميلاد جديد -->
+    <div class="mb-6">
+      <label for="birthdayInput" class="block text-purple-300 mb-2">ادخل تاريخ ميلادك:</label>
+      <input type="date" id="birthdayInput" class="rounded-lg p-2 text-black">
+      <button onclick="setCustomBirthday()" class="ml-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg">تأكيد</button>
+    </div>
+
+    <!-- روابط التواصل -->
+    <div class="space-y-4">
+      <a href="https://www.tiktok.com/@death_human1?_t=ZS-902obamBO9I&_r=1" target="_blank"
+         class="btn-anim block bg-white text-purple-800 hover:bg-purple-500 hover:text-white font-bold py-3 rounded-xl shadow-md transition">
+        TikTok 🎵
+      </a>
+      <a href="https://www.facebook.com/share/1JqXvuauCy/" target="_blank"
+         class="btn-anim block bg-white text-purple-800 hover:bg-purple-500 hover:text-white font-bold py-3 rounded-xl shadow-md transition">
+        Facebook 📘
+      </a>
+      <a href="https://www.instagram.com/bodax1181?igsh=MWc0bHI3djVuNW44cA==" target="_blank"
+         class="btn-anim block bg-white text-purple-800 hover:bg-purple-500 hover:text-white font-bold py-3 rounded-xl shadow-md transition">
+        Instagram 📸
+      </a>
+    </div>
+  </div>
+
+  <script>
+    let countdownElement = document.getElementById('countdown');
+    let birthdayInput = document.getElementById('birthdayInput');
+    let nameInput = document.getElementById('nameInput');
+
+    let targetDate = new Date('2025-11-22T00:00:00');
+
+    function updateCountdown() {
+      let now = new Date();
+      let diff = targetDate - now;
+      let name = nameInput.value.trim() || "أنت";
+
+      if (diff <= 0) {
+        countdownElement.innerHTML = `🎉 كل سنة وانت طيب ${name} 🎂`;
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.6 },
+          colors: ['#a855f7', '#ffffff', '#9333ea', '#c084fc']
+        });
+        return;
+      }
+
+      let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      let minutes = Math.floor((diff / 1000 / 60) % 60);
+      let seconds = Math.floor((diff / 1000) % 60);
+
+      countdownElement.innerHTML = `في انتظار عيد ميلاد ${name} 🎉<br>${days} يوم ${hours.toString().padStart(2,'0')} ساعة ${minutes.toString().padStart(2,'0')} دقيقة ${seconds.toString().padStart(2,'0')} ثانية`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function celebrateUpdate() {
+      countdownElement.classList.add('animate-count');
+      setTimeout(() => countdownElement.classList.remove('animate-count'), 300);
+
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#a855f7', '#ffffff', '#9333ea', '#c084fc']
+      });
+    }
+
+    function setCustomBirthday() {
+      let userDate = new Date(birthdayInput.value);
+      let name = nameInput.value.trim() || "أنت";
+
+      if (!isNaN(userDate)) {
+        let now = new Date();
+        userDate.setFullYear(now.getFullYear());
+        if (userDate < now) {
+          userDate.setFullYear(now.getFullYear() + 1);
+        }
+        targetDate = userDate;
+        alert(`✅ تم تحديث عيد ميلاد ${name}!`);
+        celebrateUpdate();
+      } else {
+        alert("❌ من فضلك اختر تاريخ صحيح.");
+      }
+    }
+  </script>
+</body>
+</html>
